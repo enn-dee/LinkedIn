@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js";
+import Notification from "../models/notification.model.js";
 import Post from "../models/posts.model.js";
 
 export const getFeedPosts = async (req, res) => {
