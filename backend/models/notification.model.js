@@ -1,4 +1,4 @@
-import mongoose, { Model } from "mongoose";
+import mongoose from "mongoose";
 const notificationSchema = new mongoose.Schema({
   recipient: {
     type: mongoose.Schema.Types.ObjectId,
@@ -24,6 +24,6 @@ const notificationSchema = new mongoose.Schema({
   },
 });
 
-const Notifications = new Model("Notifications", notificationSchema);
+const Notification = mongoose.model("Notification", notificationSchema);
 
-export default Notifications;
+export default Notification;
