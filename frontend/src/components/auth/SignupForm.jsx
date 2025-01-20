@@ -1,26 +1,29 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 const SignupForm = () => {
+  const queryClient = new QueryClient();
+
   const { mutate: signupMutation, isLoading } = useMutation({
     mutationFn: async (data) => {
-      const res = await axiosInstance.post("/auth/signup", data).then(res => res.data);
+      const res = await axiosInstance
+        .post("/auth/signup", data)
+        .then((res) => res.data);
       return res;
     },
     onError: (error) => {
-      toast.error(`${error.response.data.message}`)
+      toast.error(`${error.response.data.message}`);
     },
     onSuccess: () => {
       toast.success("Account created successfully");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
   });
   const handleSignUp = (e) => {
     e.preventDefault();
     signupMutation({ name, username, email, password });
-    // console.log("mutate; ", signupMutation);
-    console.log(`${name} ${username} ${email} ${password}`);
   };
 
   const [name, setName] = useState("");

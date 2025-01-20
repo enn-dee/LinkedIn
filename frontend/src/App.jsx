@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import SignUpPage from "./pages/SignUpPage";
-import HomePage from "./pages/auth/HomePage";
-import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/auth/SignUpPage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/auth/LoginPage";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./lib/axios";
@@ -22,7 +22,6 @@ function App() {
       }
     },
   });
-  console.log("auth user: ", authUser);
 
   if (isLoading) {
     return (

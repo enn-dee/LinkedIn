@@ -55,45 +55,44 @@ export const signup = async (req, res) => {
   }
 };
 export const signin = async (req, res) => {
-  try{
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-  
- const {username, password} = req.body
- const user = await User.findOne({username})
- if(!user){
-  return res.status(400).json({message:"Invalid credentials"})
- }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
- const isMatch = await bcrypt.compare(password, user.password)
- if(!isMatch){
-  return res.status(400).json({message:"Invalid credentials"})
- }
-
- const token = jwt.sign({userId: user._id}, process.env.JWT_SECRECT,{expiresIn:"3d"})
- await res.cookie("jwt-linkedin", token,{
-  httpOnly: true, 
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRECT, {
+      expiresIn: "3d",
+    });
+    await res.cookie("jwt-linkedin", token, {
+      httpOnly: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
       sameSite: "strict",
-      secure: process.env.NODE_ENV === "production"
- })
- return res.status(200).json({message:"Logged in successfully"})
-}catch(error){
-  console.log("error in login controller: ", error)
- res.status(500).json({message:"Server error"}) 
-}
+      secure: process.env.NODE_ENV === "production",
+    });
+    return res.status(200).json({ message: "Logged in successfully" });
+  } catch (error) {
+    console.log("error in login controller: ", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("jwt-linkedin")
-  res.json({message:"Logged out successfully"})
+  res.clearCookie("jwt-linkedin");
+  res.json({ message: "Logged out successfully" });
 };
 
-export const getCurrentUser = async(req, res)=>{
-  try{
-    res.json(req.user)
+export const getCurrentUser = async (req, res) => {
+  try {
+    res.json(req.user);
+  } catch (error) {
+    console.log("Error in getUser controller: ", error);
+    res.status(500).json({ message: "server error" });
   }
-  catch(error){
-console.log("Error in getUser controller: ", error)
-res.status(500).json({message:"server error"})
-  }
-}
+};

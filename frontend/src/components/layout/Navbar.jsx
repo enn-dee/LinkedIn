@@ -29,7 +29,7 @@ function Navbar() {
   const { mutate: logout } = useMutation({
     mutationFn: () => axiosInstance.get("/auth/logout"),
     onSuccess: () => {
-      queryClient.invalidateQueries({ quer: ["authUser"] });
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
   });
 
