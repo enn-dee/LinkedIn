@@ -26,7 +26,7 @@ function App() {
   if (isLoading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
-        <Loader className="size-36 animate-spin" color="gray" />
+        <Loader className="size-40 animate-spin" color="gray" />
       </div>
     );
   }
