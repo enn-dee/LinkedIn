@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
 import { Bell, Home, LogOut, User, Users } from "lucide-react";
@@ -24,7 +24,7 @@ function Navbar() {
     enabled: !!authUser,
   });
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const { mutate: logout } = useMutation({
     mutationFn: () => axiosInstance.get("/auth/logout"),

@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 const SignupForm = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const { mutate: signupMutation, isLoading } = useMutation({
     mutationFn: async (data) => {

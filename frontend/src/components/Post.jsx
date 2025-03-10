@@ -3,7 +3,15 @@ import React, { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { Loader, MessageCircle, Share, ThumbsUp, Trash2 } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import {
+  Loader,
+  MessageCircle,
+  Send,
+  Share,
+  ThumbsUp,
+  Trash2,
+} from "lucide-react";
 
 import PostAction from "./PostAction";
 const Post = ({ post }) => {
@@ -30,7 +38,7 @@ const Post = ({ post }) => {
     },
   });
 
-  const { mutate: createComment, isPending: isCreatingComment } = useMutation({
+  const { mutate: createComment, isPending: isAddingComment } = useMutation({
     mutationFn: async (newComment) => {
       await axiosInstance.post(`/posts/${post._id}/comment`, {
         content: newComment,
@@ -64,6 +72,29 @@ const Post = ({ post }) => {
     if (isLikingPost) return;
     likePost();
   };
+
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (newComment.trim()) {
+      createComment(newComment);
+      setNewComment("");
+      setComments([
+        ...comments,
+        {
+          content: newComment,
+          user: {
+            _id: authUser._id,
+            name: authUser.name,
+            profilePicture: authUser.profilePicture,
+          },
+          createdAt: new Date(),
+        },
+      ]);
+      return;
+    }
+    toast.error("Enter Comment");
+    return;
+  };
   return (
     <div className="bg-secondary rounded-lg shadow mb-4">
       <div className="p-4">
@@ -81,6 +112,11 @@ const Post = ({ post }) => {
                 <h3 className="font-semibold"> {post.author.name}</h3>
               </Link>
               <p className="text-xs text-info">{post.author.headline}</p>
+              <p className="text-xs text-info">
+                {formatDistanceToNow(new Date(post.createdAt), {
+                  addSuffix: true,
+                })}
+              </p>
             </div>
           </div>
           {isOwner && (
@@ -117,7 +153,7 @@ const Post = ({ post }) => {
           />
 
           <PostAction
-            icon={<MessageCircle size={18} />}
+            icon={<MessageCircle size={18}  />}
             text={`Comment (${comments.length})`}
             onClick={() => setShowComments(!showComments)}
           />
@@ -125,6 +161,58 @@ const Post = ({ post }) => {
           <PostAction icon={<Share size={18} />} text="Share" />
         </div>
       </div>
+      {showComments && (
+        <div className="px-4 pb-4">
+          <div className="mb-4 max-h-60 overflow-y-auto">
+            {comments.map((comment) => (
+              <div
+                className="mb-2 bg-base-200 p-2 rounded flex items-center"
+                key={comment._id}
+              >
+                <img
+                  src={comment.user.profilePicture || "/avatar.png"}
+                  alt={comment.user.name}
+                  className="w-8 h-8 rounded-full mr-2 flex-shrink-0"
+                />
+                <div className="flex-grow">
+                  <div className="flex items-center mb-1">
+                    <span className="font-semibold mr-2">
+                      {comment.user.name}
+                      <span className="text-xs text-info ml-3">
+                        {formatDistanceToNow(new Date(comment.createdAt), {
+                          addSuffix: true,
+                        })}
+                      </span>
+                    </span>
+                  </div>
+                  <p>{comment.content}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <form onSubmit={handleAddComment} className="flex items-center">
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Add a comment..."
+              className="flex-grow p-2 rounded-l-full bg-base-100 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <button
+              type="submit"
+              className="bg-primary text-white p-2 rounded-r-full hover:bg-primary-dark transition duration-300 "
+              disabled={isAddingComment}
+            >
+              {isAddingComment ? (
+                <Loader size={18} className="animate-spin" />
+              ) : (
+                <Send size={18} />
+              )}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

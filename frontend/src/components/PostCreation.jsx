@@ -1,11 +1,11 @@
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { Image, Loader } from "lucide-react";
 
 const PostCreation = ({ user }) => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
