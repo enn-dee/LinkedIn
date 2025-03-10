@@ -132,7 +132,7 @@ export const likePost = async (req, res) => {
     const userId = req.user._id;
     const post = await Post.findById(postId);
     // means user is unliking post [already liked]
-    if (post.likes.included(userId)) {
+    if (post.likes.includes(userId)) {
       post.likes = post.likes.filter(
         (id) => id.toString() !== userId.toString()
       );
