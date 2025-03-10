@@ -32,6 +32,10 @@ const PostCreation = ({ user }) => {
 
   const handlePostCreate = async () => {
     try {
+      if (content.length < 1) {
+        toast.error("Create valid post");
+        return;
+      }
       const postData = { content };
       if (image) postData.image = await readFileAsDataURL(image);
 
