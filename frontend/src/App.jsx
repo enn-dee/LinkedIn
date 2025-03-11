@@ -9,6 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./lib/axios";
 import { Loader } from "lucide-react";
 import NetworkPage from "./pages/NetworkPage";
+import PostPage from "./pages/PostPage";
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
@@ -56,8 +58,17 @@ function App() {
           path="/network"
           element={!authUser ? <Navigate to="/login" /> : <NetworkPage />}
         />
-      </Routes>
 
+        <Route
+          path="/network"
+          element={!authUser ? <Navigate to="/login" /> : <PostPage />}
+        />
+
+        <Route
+          path="/profile/:username"
+          element={!authUser ? <Navigate to="/login" /> : <ProfilePage />}
+        />
+      </Routes>
       <Toaster
         position="top-right"
         reverseOrder={false}

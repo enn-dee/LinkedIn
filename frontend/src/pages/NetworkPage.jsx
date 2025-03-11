@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import Sidebar from "../components/Sidebar";
 import { UserPlus } from "lucide-react";
-// import FriendRequest from "../components/FriendRequest";
-// import UserCard from "../components/UserCard";
+import FriendRequest from "../components/FriendRequest";
+import UserCard from "../components/UserCard";
 
 const NetworkPage = () => {
   const { data: user } = useQuery({ queryKey: ["authUser"] });
@@ -31,9 +31,9 @@ const NetworkPage = () => {
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-2">Connection Request</h2>
               <div className="space-y-4">
-                {/* {connectionRequests.data.map((request) => (
-									<FriendRequest key={request.id} request={request} />
-								))} */}
+                {connectionRequests.data.map((request) => (
+                  <FriendRequest key={request.id} request={request} />
+                ))}
               </div>
             </div>
           ) : (
