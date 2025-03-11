@@ -108,13 +108,13 @@ export const createComment = async (req, res) => {
 
       try {
         const postUrl = process.env.CLIENT_URL + "/post/" + postId;
-        await sendCommentNotificationEmail(
-          post.author.email,
-          post.author.name,
-          req.user.name,
-          postUrl,
-          content
-        );
+        // await sendCommentNotificationEmail(
+        //   post.author.email,
+        //   post.author.name,
+        //   req.user.name,
+        //   postUrl,
+        //   content
+        // );
       } catch (error) {
         console.log("failed to send email: createComment func: ", error);
       }
