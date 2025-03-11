@@ -3,10 +3,12 @@ import Layout from "./components/layout/Layout";
 import SignUpPage from "./pages/auth/SignUpPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
+import NotificationsPage from "./pages/NotificationPage";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "./lib/axios";
 import { Loader } from "lucide-react";
+import NetworkPage from "./pages/NetworkPage";
 function App() {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
@@ -44,6 +46,15 @@ function App() {
         <Route
           path="/login"
           element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/notifications"
+          element={!authUser ? <Navigate to="/login" /> : <NotificationsPage />}
+        />
+        <Route
+          path="/network"
+          element={!authUser ? <Navigate to="/login" /> : <NetworkPage />}
         />
       </Routes>
 
